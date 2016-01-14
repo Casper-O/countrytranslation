@@ -169,8 +169,6 @@ class countrytranslation extends Module
     	if (($handle = fopen($this->local_path."/langs/IP2LOCATION-COUNTRY-MULTILINGUAL.CSV", "r")) !== FALSE) {
     		while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
 	    		if($firstline) { $firstline = false; continue; }
-	    		
-	    		$num = count($data);
 	    		$result[$data[0]][] = array(
 	    			'iso_code' => $data[2],
 	    			'country_name' => ucwords(strtolower($data[5]))
@@ -193,28 +191,5 @@ class countrytranslation extends Module
 	    		}
 	    	}
     	}
-		/*
-		$languages = Language::getLanguages();
-		foreach($languages as $language)
-		{
-			ppp(dirname(__FILE__));
-			ppp($language);
-			$lang_path = $this->local_path.'langs/'.$language['iso_code'].'.xml';
-			if(is_file($lang_path))
-			{
-				$countries= simplexml_load_file($lang_path);
-				echo count($countries);
-				foreach ($countries as $row)
-				{
-					$data = array(
-						'name' => (string)$row->name,
-						'id' => (string)$row->attributes()->id
-					);
-					DB::getInstance()->execute("UPDATE "._DB_PREFIX_."country_lang SET name = '".$data['name']."' WHERE id_lang = ".$language['id_lang']." AND id_country = (SELECT c.id_country FROM "._DB_PREFIX_."country c WHERE c.iso_code = '".$data['id']."')");
-				}
-			}
-		}
-		ddd();
-		*/
     }
 }
