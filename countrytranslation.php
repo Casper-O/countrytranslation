@@ -28,7 +28,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class countrytranslation extends Module
+class countryTranslation extends Module
 {
     protected $config_form = false;
 
@@ -162,34 +162,29 @@ class countrytranslation extends Module
      */
     protected function postProcess()
     {
-    	$languages = Language::getLanguages();
-    	$row = 1;
-    	//ppp($this->_path);
-    	$firstline = true;
-    	if (($handle = fopen($this->local_path."/langs/IP2LOCATION-COUNTRY-MULTILINGUAL.CSV", "r")) !== FALSE) {
-    		while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-	    		if($firstline) { $firstline = false; continue; }
-	    		$result[$data[0]][] = array(
-	    			'iso_code' => $data[2],
-	    			'country_name' => ucwords(strtolower($data[5]))
-	    		);
-		
-	    	}
-	    	
-	    	foreach($languages as $language)
-	    	{
-	    		{
-		    		foreach ($result[strtoupper($language['iso_code'])] as $row)
-		    		{
-						$data = array(
-							'name' => $row['country_name'],
-							'id' => (string)$row['iso_code']
-						);
-						
-						DB::getInstance()->execute("UPDATE "._DB_PREFIX_."country_lang SET name = '".$data['name']."' WHERE id_lang = ".$language['id_lang']." AND id_country = (SELECT c.id_country FROM "._DB_PREFIX_."country c WHERE c.iso_code = '".$data['id']."')");
-					}
-	    		}
-	    	}
-    	}
+        $languages = Language::getLanguages();
+        $row = 1;
+        //ppp($this->_path);
+        $firstline = true;
+        if (($handle = fopen($this->local_path."/langs/IP2LOCATION-COUNTRY-MULTILINGUAL.CSV", "r")) !== FALSE) {
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                if($firstline) { $firstline = false; continue; }
+                $result[$data[0]][] = array(
+                    'iso_code' => $data[2],
+                    'country_name' => ucwords(strtolower($data[5]))
+                );
+            }
+            foreach($languages as $language)
+            {
+                foreach ($result[strtoupper($language['iso_code'])] as $row)
+                {
+                    $data = array(
+                        'name' => $row['country_name'],
+                        'id' => (string)$row['iso_code']
+                    );
+                    DB::getInstance()->execute("UPDATE "._DB_PREFIX_."country_lang SET name = '".$data['name']."' WHERE id_lang = ".$language['id_lang']." AND id_country = (SELECT c.id_country FROM "._DB_PREFIX_."country c WHERE c.iso_code = '".$data['id']."')");
+                }
+            }
+        }
     }
 }
