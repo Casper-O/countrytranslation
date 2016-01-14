@@ -80,7 +80,7 @@ class countryTranslation extends Module
         if (((bool)Tools::isSubmit('submitCountryTranslationModule')) == true) {
             $this->postProcess();
         }
-		
+        
         return $this->renderForm();
     }
 
@@ -154,7 +154,7 @@ class countryTranslation extends Module
      */
     protected function getConfigFormValues()
     {
-		
+        
     }
 
     /**
@@ -162,13 +162,18 @@ class countryTranslation extends Module
      */
     protected function postProcess()
     {
+        $result = array();
         $languages = Language::getLanguages();
         $row = 1;
         //ppp($this->_path);
         $firstline = true;
-        if (($handle = fopen($this->local_path."/langs/IP2LOCATION-COUNTRY-MULTILINGUAL.CSV", "r")) !== FALSE) {
+        if (($handle = fopen($this->local_path."/langs/IP2LOCATION-COUNTRY-MULTILINGUAL.CSV", "r")) !== false) {
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                if($firstline) { $firstline = false; continue; }
+                if($firstline)
+                {
+                    $firstline = false;
+                    continue;
+                }
                 $result[$data[0]][] = array(
                     'iso_code' => $data[2],
                     'country_name' => ucwords(strtolower($data[5]))
