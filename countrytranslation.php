@@ -28,7 +28,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-class countryTranslation extends Module
+class CountryTranslation extends Module
 {
     protected $config_form = false;
 
@@ -169,8 +169,7 @@ class countryTranslation extends Module
         $firstline = true;
         if (($handle = fopen($this->local_path."/langs/IP2LOCATION-COUNTRY-MULTILINGUAL.CSV", "r")) !== false) {
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                if($firstline)
-                {
+                if($firstline){
                     $firstline = false;
                     continue;
                 }
@@ -179,10 +178,8 @@ class countryTranslation extends Module
                     'country_name' => ucwords(strtolower($data[5]))
                 );
             }
-            foreach($languages as $language)
-            {
-                foreach ($result[strtoupper($language['iso_code'])] as $row)
-                {
+            foreach($languages as $language){
+                foreach ($result[strtoupper($language['iso_code'])] as $row){
                     $data = array(
                         'name' => $row['country_name'],
                         'id' => (string)$row['iso_code']
